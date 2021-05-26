@@ -7,7 +7,7 @@ from authentication.models import Empresa
 
 class Formacio(models.Model):
     nom = models.CharField(max_length=200)
-    descripcio = models.CharField(max_length=200, null=True, blank=True)
+    descripcio = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return self.nom
@@ -22,7 +22,7 @@ class Formacio(models.Model):
 
 
 class Pregunta(models.Model):
-    enunciat = models.CharField(max_length=200)
+    enunciat = models.TextField()
 
     def __unicode__(self):
         return self.enunciat
@@ -57,10 +57,10 @@ class Pregunta_Resposta(models.Model):
     is_correct = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return '%s - %s' % (self.formacio.nom, self.pregunta.enunciat)
+        return '%s - %s' % (self.pregunta.enunciat, self.resposta)
 
     def __str__(self):
-        return '%s - %s' % (self.formacio.nom, self.pregunta.enunciat)
+        return '%s - %s' % (self.pregunta.enunciat, self.resposta)
 
     class Meta:
         verbose_name = 'Relacio Pregunta-Resposta'
