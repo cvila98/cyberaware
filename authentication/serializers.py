@@ -1,17 +1,19 @@
 from rest_framework import serializers
-from django.contrib.auth import password_validation, authenticate
+from django.contrib.auth import password_validation, authenticate, get_user_model
 from django.core.validators import RegexValidator, FileExtensionValidator
 
-
 from rest_framework.authtoken.models import Token
+from rest_framework.serializers import ModelSerializer
 from rest_framework.validators import UniqueValidator
 
 from authentication.models import Usuari, Empresa
 
+
 class UsuariModelSerializer(serializers.ModelSerializer):
     empresa = serializers.SlugRelatedField(read_only=True, slug_field='nom')
+
     class Meta:
-        model=Usuari
+        model = Usuari
         fields = [
             'email',
             'name',
@@ -20,8 +22,8 @@ class UsuariModelSerializer(serializers.ModelSerializer):
             'empresa'
         ]
 
-class UsuariLoginSerializer(serializers.Serializer):
 
+class UsuariLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(min_length=8, max_length=24)
 
@@ -37,6 +39,7 @@ class UsuariLoginSerializer(serializers.Serializer):
     def create(self, validated_data):
         token, created = Token.objects.get_or_create(user=self.context['user'])
         return self.context['user'], token.key
+
 
 class UsuariSignUpSerializer(serializers.Serializer):
     email = serializers.EmailField(
@@ -56,7 +59,6 @@ class UsuariSignUpSerializer(serializers.Serializer):
     if_admin = serializers.BooleanField(default=False, allow_null=True)
     empresa = serializers.CharField(max_length=200)
 
-
     def validate(self, data):
         passwd = data['password']
         passwd_conf = data['password_confirmation']
@@ -73,6 +75,7 @@ class UsuariSignUpSerializer(serializers.Serializer):
         empresa = Empresa.objects.get(nom=name_empresa)
         user = Usuari.objects.create_user(**data, empresa=empresa)
         return user
+
 
 class EmpresaModelSerializer(serializers.ModelSerializer):
     class Meta:

@@ -21,5 +21,6 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('authentication.urls')),
+    path('api/authentication/', include('authentication.urls')),
+    path('api/formacions/', include('formacions.urls'))
 ]
