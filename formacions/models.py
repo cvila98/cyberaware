@@ -53,7 +53,8 @@ class Formacio_Pregunta(models.Model):
 
 class Pregunta_Resposta(models.Model):
     pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
-    resposta = models.CharField(max_length=200)
+    resposta = models.TextField()
+    hint = models.TextField(null=True, blank=True)
     is_correct = models.BooleanField(default=False)
 
     def __unicode__(self):
