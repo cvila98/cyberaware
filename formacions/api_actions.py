@@ -84,7 +84,7 @@ def check_resposta(user, id_pregunta, id_resposta):
             formacio_empresa = Formacio_Empresa.objects.get(formacio=formacio, empresa=empresa)
         except Formacio_Empresa.DoesNotExist:
             return {'error': 'Aquesta pregunta no pertany a cap formació de l\'empresa de l\'usuari.'}, None
-        
+
         try:
             resposta = Pregunta_Resposta.objects.get(id=id_resposta)
         except Pregunta_Resposta.DoesNotExist:
