@@ -31,3 +31,29 @@ def get_formacions(request):
 
         return Response(response, HTTP_200_OK)
 
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_preguntes(request, id_formacio):
+    if request.method == 'GET':
+        user = request.user
+        (error, response) = api_actions.get_preguntes(user, id_formacio)
+
+        if error:
+            return Response(error, HTTP_400_BAD_REQUEST)
+
+        return Response(response, HTTP_200_OK)
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def check_resposta(request, id_pregunta):
+    if request.method == 'POST':
+        jsonBody = json.loads(request.body)
+        user = request.user
+        (error, response) = api_actions.check_resposta(user, id_pregunta, jsonBody['resposta'])
+
+        if error:
+            return Response(error, HTTP_400_BAD_REQUEST)
+
+        return Response(response, HTTP_200_OK)
