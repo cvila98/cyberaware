@@ -95,7 +95,8 @@ def check_resposta(user, id_pregunta, id_resposta):
         except Pregunta_Resposta.DoesNotExist:
             return {'error': 'Aquesta resposta no pertany a aquesta pregunta.'}, None
 
-        result = {'is_correct': resposta.is_correct}
+        result = {'is_correct': resposta.is_correct,
+                  'hint': resposta.hint}
         return None, result
 
     except Exception as e:
