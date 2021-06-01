@@ -15,13 +15,15 @@ def get_formacions(user):
             if formacio:
                 formacio_object = {
                     'id': formacio.id,
-                    'nom': formacio.nom,
-                    'descripcio': formacio.descripcio,
+                    'nom': str(formacio.nom),
+                    'descripcio': str(formacio.descripcio),
                 }
 
                 formacions_array.append(formacio_object)
 
         result = {'formacions': formacions_array}
+
+
         return None, result
 
     except Exception as e:
@@ -96,7 +98,7 @@ def check_resposta(user, id_pregunta, id_resposta):
             return {'error': 'Aquesta resposta no pertany a aquesta pregunta.'}, None
 
         result = {'is_correct': resposta.is_correct,
-                  'hint': resposta.hint}
+                  'hint': resposta.hint.__str__()}
         return None, result
 
     except Exception as e:
