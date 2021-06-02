@@ -103,3 +103,29 @@ def check_resposta(user, id_pregunta, id_resposta):
 
     except Exception as e:
         return {'error': 'API Error'}, None
+
+
+def resposta_correcta(user, id_pregunta):
+    try:
+        resposta_correcta = 0
+        empresa = user.empresa
+        pregunta = Pregunta.objects.get(id=id_pregunta)
+
+        try:
+            formacio = Formacio_Pregunta.objects.get(pregunta=pregunta).formacio
+            formacio_empresa = Formacio_Empresa.objects.get(formacio=formacio, empresa=empresa)
+        except Formacio_Empresa.DoesNotExist:
+            return {'error': 'Aquesta pregunta no pertany a cap formació de l\'empresa de l\'usuari.'}, None
+
+        respostes = Pregunta_Resposta.objects.filter(pregunta= pregunta)
+
+        for resposta in respostes:
+            if resposta.is_correct:
+                resposta_correcta = resposta.id
+
+
+        result = {'resposta_correcta': resposta_correcta}
+        return None, result
+
+    except Exception as e:
+        return {'error': 'API Error'}, None

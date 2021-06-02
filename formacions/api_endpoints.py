@@ -57,3 +57,16 @@ def check_resposta(request, id_pregunta):
             return Response(error, HTTP_400_BAD_REQUEST)
 
         return Response(response, HTTP_200_OK)
+
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def resposta_correcta(request, id_pregunta):
+    if request.method == 'GET':
+        user = request.user
+        (error, response) = api_actions.resposta_correcta(user, id_pregunta)
+
+        if error:
+            return Response(error, HTTP_400_BAD_REQUEST)
+
+        return Response(response, HTTP_200_OK)
