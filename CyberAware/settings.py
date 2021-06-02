@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'authentication',
     'rest_framework',
     'rest_framework.authtoken',
+    'formacions'
 ]
 
 AUTH_USER_MODEL = "authentication.Usuari"
@@ -124,6 +125,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+UNICODE_JSON = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

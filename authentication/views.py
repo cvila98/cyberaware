@@ -1,12 +1,14 @@
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from rest_framework import status, viewsets, permissions
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import RetrieveUpdateAPIView
 import rest_framework.permissions
 from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from authentication.serializers import UsuariLoginSerializer, UsuariModelSerializer, UsuariSignUpSerializer
 
@@ -65,13 +67,17 @@ class EmpresaSet(ExactMatchModelViweSet):
 class UsuariSet(ExactMatchModelViweSet):
     model = Usuari
     queryset = Usuari.objects.all()
-    permission_classes = (rest_framework.permissions.IsAuthenticated,)
+    permission_classes = (rest_framework.permissions.IsAdminUser,)
     serializer_class = UsuariModelSerializer
 
 
-class CurrentUserView(viewsets.GenericViewSet):
-    def get(self, request):
-        serializer = UsuariModelSerializer(request.user)
-        return Response(serializer.data)
+class CurrentUserView(viewsets.ModelViewSet):
+    serializer_class = UsuariModelSerializer
+    permission_classes = (rest_framework.permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        user = self.request.user
+        return Usuari.objects.filter(email=user.email)
+
 
 
