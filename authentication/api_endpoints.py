@@ -21,3 +21,15 @@ def update_profile(request):
             return Response(error, HTTP_400_BAD_REQUEST)
 
         return Response(response, HTTP_200_OK)
+
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_puntuacio_usuari(request):
+    if request.method == 'GET':
+        user = request.user
+        (error, response) = api_actions.get_puntuacio_usuari(user)
+        if error:
+            return Response(error, HTTP_400_BAD_REQUEST)
+
+        return Response(response, HTTP_200_OK)

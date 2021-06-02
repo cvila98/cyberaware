@@ -15,5 +15,6 @@ router.register(r'users/profile', auth_views.CurrentUserView, basename='users')
 
 urlpatterns = [
     path('', include(router.urls)),
-    url('^update_profile/', api_endpoints.update_profile, name='update profile')
+    url('^update_profile/', api_endpoints.update_profile, name='update profile'),
+    url('^get_puntuacio/', api_endpoints.get_puntuacio_usuari, name='get puntuacio'),
 ]

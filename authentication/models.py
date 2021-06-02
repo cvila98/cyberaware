@@ -26,6 +26,7 @@ class Usuari(AbstractUser):
     name = models.CharField(max_length=200, null=True, blank=True)
     if_admin = models.BooleanField(null=True, default=False)
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, null=True, blank=True)
+    puntuacio = models.IntegerField(default=0, null=True, blank=True)
 
     def __unicode__(self):
         return self.email

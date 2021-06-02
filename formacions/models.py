@@ -2,7 +2,7 @@ from django.db import models
 
 
 # Create your models here.
-from authentication.models import Empresa
+from authentication.models import Empresa, Usuari
 
 
 class Formacio(models.Model):
@@ -81,4 +81,22 @@ class Formacio_Empresa(models.Model):
     class Meta:
         verbose_name = 'Relacio Formacio-Empresa'
         verbose_name_plural = 'Relacions Formacio-Empresa'
+        default_permissions = {'add', 'change', 'delete', 'view'}
+
+class Formacio_Usuari(models.Model):
+    formacio = models.ForeignKey(Formacio, on_delete=models.CASCADE)
+    usuari = models.ForeignKey(Usuari, on_delete=models.CASCADE)
+    max_puntuacio = models.IntegerField(default=0, null=True, blank=True)
+    puntuacio = models.IntegerField(default=0, null=True, blank=True)
+    data_ultima_realitzacio = models.DateField(null=True, blank=True)
+
+    def __unicode__(self):
+        return '%s - %s' % (self.formacio.nom, self.usuari.name)
+
+    def __str__(self):
+        return '%s - %s' % (self.formacio.nom, self.usuari.name)
+
+    class Meta:
+        verbose_name = 'Relacio Formacio realitzada-Usuari'
+        verbose_name_plural = 'Relacions Formacions realitzades-Usuaris'
         default_permissions = {'add', 'change', 'delete', 'view'}
