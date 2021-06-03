@@ -1,5 +1,6 @@
 
-from formacions.models import Formacio_Usuari
+from formacions.models import Formacio_Usuari, Formacio_Empresa
+
 
 def update_user(user, jsonBody):
     try:
@@ -26,12 +27,15 @@ def get_puntuacio_usuari(user):
 
         max_puntuacio = 0
         realitzades = Formacio_Usuari.objects.filter(usuari=user)
+        empresa = user.empresa
+        formacions_empresa = Formacio_Empresa.objects.filter(empresa=empresa)
         for formacio in realitzades:
             max_puntuacio += formacio.max_puntuacio
         json_object = {
             'puntuacio': user.puntuacio,
             'max_puntuacio': max_puntuacio,
             'formacions_realitzades': len(realitzades),
+            'formacions': len(formacions_empresa),
         }
 
         return None, json_object

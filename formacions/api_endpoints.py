@@ -70,3 +70,17 @@ def resposta_correcta(request, id_pregunta):
             return Response(error, HTTP_400_BAD_REQUEST)
 
         return Response(response, HTTP_200_OK)
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def submit_formacio(request, id_formacio):
+    if request.method == 'POST':
+        user = request.user
+        jsonBody = json.loads(request.body)
+        (error, response) = api_actions.submit_formacio(user, id_formacio, jsonBody)
+
+        if error:
+            return Response(error, HTTP_400_BAD_REQUEST)
+
+        return Response(response, HTTP_200_OK)
