@@ -24,15 +24,20 @@ def update_user(user, jsonBody):
 
 def get_puntuacio_usuari(user):
     try:
-
+        puntuacio=0
         max_puntuacio = 0
         realitzades = Formacio_Usuari.objects.filter(usuari=user)
         empresa = user.empresa
         formacions_empresa = Formacio_Empresa.objects.filter(empresa=empresa)
         for formacio in realitzades:
+            puntuacio += formacio.puntuacio
             max_puntuacio += formacio.max_puntuacio
+
+        user.puntuacio = puntuacio
+        user.save()
+
         json_object = {
-            'puntuacio': user.puntuacio,
+            'puntuacio': puntuacio,
             'max_puntuacio': max_puntuacio,
             'formacions_realitzades': len(realitzades),
             'formacions': len(formacions_empresa),
