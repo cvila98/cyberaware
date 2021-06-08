@@ -15,12 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
 from rest_framework import routers
+
+from CyberAware import api_endpoints
 
 router = routers.DefaultRouter()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/authentication/', include('authentication.urls')),
-    path('api/formacions/', include('formacions.urls'))
+    path('api/formacions/', include('formacions.urls')),
+    path('api/admin/puntuacions/', api_endpoints.get_puntuacions_empresa)
 ]

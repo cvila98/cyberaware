@@ -88,7 +88,7 @@ class Formacio_Usuari(models.Model):
     usuari = models.ForeignKey(Usuari, on_delete=models.CASCADE)
     max_puntuacio = models.IntegerField(default=0, null=True, blank=True)
     puntuacio = models.IntegerField(default=0, null=True, blank=True)
-    data_ultima_realitzacio = models.DateField(null=True, blank=True)
+    data_realitzacio = models.DateField(null=True, blank=True)
 
     def __unicode__(self):
         return '%s - %s' % (self.formacio.nom, self.usuari.name)

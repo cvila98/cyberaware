@@ -15,14 +15,14 @@ def get_formacions(user):
         formacions_empresa = Formacio_Empresa.objects.filter(empresa=empresa)
         for form_empresa in formacions_empresa:
             realitzada = False
-            print(form_empresa.formacio.nom)
             try:
-                formacio_usuari = Formacio_Usuari.objects.get(formacio=form_empresa.formacio, usuari=user)
+                formacio_usuari = Formacio_Usuari.objects.filter(formacio=form_empresa.formacio, usuari=user)
                 date_before = datetime.date.today() - datetime.timedelta(days=7)
-                print(formacio_usuari.data_ultima_realitzacio)
-                if date_before < formacio_usuari.data_ultima_realitzacio:
-                    print('entro')
-                    realitzada = True
+                for formacio in formacio_usuari:
+                    if not realitzada:
+                        if date_before < formacio.data_realitzacio:
+                            realitzada = True
+
             except Formacio_Usuari.DoesNotExist:
                 realitzada = False
 
@@ -183,15 +183,15 @@ def submit_formacio(user, id_formacio, jsonBody):
             return {'error': 'Aquesta formació no pertany a l\'empresa de l\'usuari.'}, None
 
         try:
-            formacio_usuari = Formacio_Usuari.objects.get(usuari=user, formacio=formacio)
+            formacio_usuari = Formacio_Usuari.objects.get(usuari=user, formacio=formacio, data_realitzacio=date)
         except Formacio_Usuari.DoesNotExist:
-            formacio_usuari = Formacio_Usuari(usuari=user, formacio=formacio)
+            formacio_usuari = Formacio_Usuari(usuari=user, formacio=formacio, data_realitzacio=date)
 
-        if formacio_usuari.data_ultima_realitzacio != date:
-            user.puntuacio += puntuacio
+        if formacio_usuari.data_realitzacio != date:
+            user.puntuacio_acumulada += puntuacio
+            user.max_puntuacio_acumulada += max_puntuacio
             user.save()
 
-        formacio_usuari.data_ultima_realitzacio = date
         formacio_usuari.puntuacio = puntuacio
         formacio_usuari.max_puntuacio = max_puntuacio
         formacio_usuari.save()
