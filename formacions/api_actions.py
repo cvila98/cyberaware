@@ -186,11 +186,9 @@ def submit_formacio(user, id_formacio, jsonBody):
             formacio_usuari = Formacio_Usuari.objects.get(usuari=user, formacio=formacio, data_realitzacio=date)
         except Formacio_Usuari.DoesNotExist:
             formacio_usuari = Formacio_Usuari(usuari=user, formacio=formacio, data_realitzacio=date)
-
-        if formacio_usuari.data_realitzacio != date:
             user.puntuacio_acumulada += puntuacio
             user.max_puntuacio_acumulada += max_puntuacio
-            user.formacions_acumulades +=1
+            user.formacions_acumulades += 1
             user.save()
 
         formacio_usuari.puntuacio = puntuacio

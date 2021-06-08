@@ -47,7 +47,7 @@ def get_puntuacio_usuari(user):
             'max_puntuacio_acumulada': user.max_puntuacio_acumulada,
             'formacions_realitzades': len(realitzades),
             'formacions_pendents': (len(formacions_empresa)-len(realitzades)),
-            'formacions_totals': len(formacions_empresa),
+            'formacions_acumulades': user.formacions_acumulades,
         }
 
         return None, json_object
