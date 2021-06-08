@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from simple_history.admin import SimpleHistoryAdmin
 
-from .models import Pregunta, Formacio_Pregunta, Formacio, Formacio_Empresa, Pregunta_Resposta
+from .models import Pregunta, Formacio_Pregunta, Formacio, Formacio_Empresa, Pregunta_Resposta, Formacio_Usuari
 
 
 class PreguntaAdmin(SimpleHistoryAdmin):
@@ -49,8 +49,8 @@ class Formacio_PreguntaAdmin(SimpleHistoryAdmin):
     )
 
     search_fields = [
-        'formacio',
-        'pregunta',
+        'formacio__nom',
+        'pregunta__enunciat',
     ]
 
 
@@ -65,8 +65,8 @@ class Formacio_EmpresaAdmin(SimpleHistoryAdmin):
     )
 
     search_fields = [
-        'formacio',
-        'empresa',
+        'formacio__nom',
+        'empresa__nom',
     ]
 
 
@@ -82,7 +82,7 @@ class Pregunta_RespostaAdmin(SimpleHistoryAdmin):
     )
 
     search_fields = [
-        'pregunta',
+        'pregunta__enunciat',
         'resposta',
     ]
 
@@ -92,3 +92,19 @@ class Pregunta_RespostaAdmin(SimpleHistoryAdmin):
 
 
 admin.site.register(Pregunta_Resposta, Pregunta_RespostaAdmin)
+
+class Formacio_UsuariAdmin(SimpleHistoryAdmin):
+    list_per_page = 100
+
+    list_display = (
+        'formacio',
+        'usuari',
+    )
+
+    search_fields = [
+        'formacio__nom',
+        'usuari__email',
+    ]
+
+
+admin.site.register(Formacio_Usuari, Formacio_UsuariAdmin)

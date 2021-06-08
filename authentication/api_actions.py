@@ -1,3 +1,7 @@
+import datetime
+
+from formacions.models import Formacio_Usuari, Formacio_Empresa
+
 
 def update_user(user, jsonBody):
     try:
@@ -14,6 +18,39 @@ def update_user(user, jsonBody):
         }
         result = {'user': user_object}
         return None, result
+
+    except Exception as e:
+        return {'error': 'API error'}, None
+
+
+def get_puntuacio_usuari(user):
+    try:
+        puntuacio=0
+        max_puntuacio = 0
+        formacions_pendents=[]
+
+        date_before = datetime.date.today() - datetime.timedelta(days=7)
+
+        realitzades = Formacio_Usuari.objects.filter(usuari=user, data_realitzacio__gte=date_before)
+        empresa = user.empresa
+        formacions_empresa = Formacio_Empresa.objects.filter(empresa=empresa)
+
+        for formacio in realitzades:
+            puntuacio += formacio.puntuacio
+            max_puntuacio += formacio.max_puntuacio
+
+
+        json_object = {
+            'puntuacio': puntuacio,
+            'max_puntuacio': max_puntuacio,
+            'puntuacio_acumulada': user.puntuacio_acumulada,
+            'max_puntuacio_acumulada': user.max_puntuacio_acumulada,
+            'formacions_realitzades': len(realitzades),
+            'formacions_pendents': (len(formacions_empresa)-len(realitzades)),
+            'formacions_acumulades': user.formacions_acumulades,
+        }
+
+        return None, json_object
 
     except Exception as e:
         return {'error': 'API error'}, None

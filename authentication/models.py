@@ -27,6 +27,11 @@ class Usuari(AbstractUser):
     if_admin = models.BooleanField(null=True, default=False)
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, null=True, blank=True)
 
+    puntuacio_acumulada = models.IntegerField(default=0, null=True, blank=True)
+    max_puntuacio_acumulada = models.IntegerField(default=0, null=True, blank=True)
+
+    formacions_acumulades = models.IntegerField(default=0, null=True, blank=True)
+
     def __unicode__(self):
         return self.email
 

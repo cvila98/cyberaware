@@ -1,5 +1,8 @@
+import datetime
+
 from authentication.models import Empresa, Usuari
-from formacions.models import Formacio, Formacio_Empresa, Formacio_Pregunta, Pregunta, Pregunta_Resposta
+from formacions.models import Formacio, Formacio_Empresa, Formacio_Pregunta, Pregunta, Pregunta_Resposta, \
+    Formacio_Usuari
 
 
 def get_formacions(user):
@@ -7,9 +10,27 @@ def get_formacions(user):
         empresa = user.empresa
         formacions_array = []
         formacions = []
+        realitzades = []
+        realitzades_array = []
         formacions_empresa = Formacio_Empresa.objects.filter(empresa=empresa)
         for form_empresa in formacions_empresa:
-            formacions.append(form_empresa.formacio)
+            realitzada = False
+            try:
+                formacio_usuari = Formacio_Usuari.objects.filter(formacio=form_empresa.formacio, usuari=user)
+                date_before = datetime.date.today() - datetime.timedelta(days=7)
+                for formacio in formacio_usuari:
+                    if not realitzada:
+                        if date_before < formacio.data_realitzacio:
+                            realitzada = True
+
+            except Formacio_Usuari.DoesNotExist:
+                realitzada = False
+
+            if not realitzada:
+                formacions.append(form_empresa.formacio)
+            else:
+                realitzades.append(form_empresa.formacio)
+
 
         for formacio in formacions:
             if formacio:
@@ -21,12 +42,24 @@ def get_formacions(user):
 
                 formacions_array.append(formacio_object)
 
-        result = {'formacions': formacions_array}
+        for formacio in realitzades:
+            if formacio:
+                formacio_object = {
+                    'id': formacio.id,
+                    'nom': str(formacio.nom),
+                    'descripcio': str(formacio.descripcio),
+                }
+
+                realitzades_array.append(formacio_object)
+
+        result = {'formacions': formacions_array,
+                  'realitzades': realitzades_array}
 
 
         return None, result
 
     except Exception as e:
+        print(e)
         return {'error': 'API error'}, None
 
 
@@ -128,4 +161,43 @@ def resposta_correcta(user, id_pregunta):
         return None, result
 
     except Exception as e:
+        return {'error': 'API Error'}, None
+
+
+def submit_formacio(user, id_formacio, jsonBody):
+    try:
+        date_aux = jsonBody['date'].split('-')
+        print(date_aux)
+        date= datetime.date(int(date_aux[0]), int(date_aux[1]), int(date_aux[2]))
+        puntuacio = jsonBody['puntuacio']
+        max_puntuacio = jsonBody['max_puntuacio']
+        try:
+            formacio = Formacio.objects.get(id=id_formacio)
+        except Formacio.DoesNotExist:
+            return {'error': 'Aquesta formacio no existeix.'}, None
+
+        empresa = user.empresa
+        try:
+            formacio_empresa = Formacio_Empresa.objects.get(formacio=formacio, empresa=empresa)
+        except Formacio_Empresa.DoesNotExist:
+            return {'error': 'Aquesta formació no pertany a l\'empresa de l\'usuari.'}, None
+
+        try:
+            formacio_usuari = Formacio_Usuari.objects.get(usuari=user, formacio=formacio, data_realitzacio=date)
+        except Formacio_Usuari.DoesNotExist:
+            formacio_usuari = Formacio_Usuari(usuari=user, formacio=formacio, data_realitzacio=date)
+            user.puntuacio_acumulada += puntuacio
+            user.max_puntuacio_acumulada += max_puntuacio
+            user.formacions_acumulades += 1
+            user.save()
+
+        formacio_usuari.puntuacio = puntuacio
+        formacio_usuari.max_puntuacio = max_puntuacio
+        formacio_usuari.save()
+
+
+        result = {'Submit realitzat amb exit.'}
+        return None, result
+    except Exception as e:
+        print(e)
         return {'error': 'API Error'}, None
