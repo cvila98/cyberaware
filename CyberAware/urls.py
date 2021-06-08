@@ -26,5 +26,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/authentication/', include('authentication.urls')),
     path('api/formacions/', include('formacions.urls')),
-    path('api/admin/puntuacions/', api_endpoints.get_puntuacions_empresa)
+    path('api/admin/puntuacions/', api_endpoints.get_puntuacions_empresa),
+    path('api/admin/formacions/', api_endpoints.get_formacions_empresa),
 ]

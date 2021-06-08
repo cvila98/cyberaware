@@ -30,6 +30,8 @@ class Usuari(AbstractUser):
     puntuacio_acumulada = models.IntegerField(default=0, null=True, blank=True)
     max_puntuacio_acumulada = models.IntegerField(default=0, null=True, blank=True)
 
+    formacions_acumulades = models.IntegerField(default=0, null=True, blank=True)
+
     def __unicode__(self):
         return self.email
 

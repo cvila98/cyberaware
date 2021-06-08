@@ -190,6 +190,7 @@ def submit_formacio(user, id_formacio, jsonBody):
         if formacio_usuari.data_realitzacio != date:
             user.puntuacio_acumulada += puntuacio
             user.max_puntuacio_acumulada += max_puntuacio
+            user.formacions_acumulades +=1
             user.save()
 
         formacio_usuari.puntuacio = puntuacio

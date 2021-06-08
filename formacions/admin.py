@@ -49,8 +49,8 @@ class Formacio_PreguntaAdmin(SimpleHistoryAdmin):
     )
 
     search_fields = [
-        'formacio',
-        'pregunta',
+        'formacio__nom',
+        'pregunta__enunciat',
     ]
 
 
@@ -65,8 +65,8 @@ class Formacio_EmpresaAdmin(SimpleHistoryAdmin):
     )
 
     search_fields = [
-        'formacio',
-        'empresa',
+        'formacio__nom',
+        'empresa__nom',
     ]
 
 
@@ -82,7 +82,7 @@ class Pregunta_RespostaAdmin(SimpleHistoryAdmin):
     )
 
     search_fields = [
-        'pregunta',
+        'pregunta__enunciat',
         'resposta',
     ]
 
@@ -102,8 +102,8 @@ class Formacio_UsuariAdmin(SimpleHistoryAdmin):
     )
 
     search_fields = [
-        'formacio',
-        'usuari',
+        'formacio__nom',
+        'usuari__email',
     ]
 
 

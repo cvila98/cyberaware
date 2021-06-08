@@ -43,6 +43,8 @@ def get_puntuacio_usuari(user):
         json_object = {
             'puntuacio': puntuacio,
             'max_puntuacio': max_puntuacio,
+            'puntuacio_acumulada': user.puntuacio_acumulada,
+            'max_puntuacio_acumulada': user.max_puntuacio_acumulada,
             'formacions_realitzades': len(realitzades),
             'formacions_pendents': (len(formacions_empresa)-len(realitzades)),
             'formacions_totals': len(formacions_empresa),
