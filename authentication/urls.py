@@ -10,7 +10,7 @@ from authentication import api_endpoints
 router = DefaultRouter()
 router.register(r'', auth_views.UsuariViewSet, basename='authentication')
 router.register(r'empreses', auth_views.EmpresaSet, basename='empreses')
-router.register(r'users/profile', auth_views.CurrentUserView, basename='users profile')
+router.register(r'users/profile', auth_views.CurrentUserView, basename='user profile')
 
 urlpatterns = [
     path('', include(router.urls)),
